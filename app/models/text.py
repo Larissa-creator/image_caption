@@ -18,7 +18,7 @@ def generate_image_caption(
 ):
     # Resize image while maintaining aspect ratio
     max_dimension = 1024
-    image.thumbnail((max_dimension, max_dimension), Image.ANTIALIAS)
+    image.thumbnail((max_dimension, max_dimension), Image.LANCZOS)
 
     device = next(model.parameters()).device  # Get device (CPU or GPU)
 
