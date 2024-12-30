@@ -4,20 +4,27 @@ import requests
 
 st.title("Image Caption Generator")
 
+# Configurable API URL
+api_url = st.secrets.get("API_URL", "http://localhost:8000/generate/caption")
+
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    st.image(image, use_container_width=True)
-
-    if st.button("Generate Image Caption"):
-        api_url = "http://localhost:8000/generate/caption"
-        files = {"image": uploaded_file.getvalue()}  # Send image data
-        response = requests.post(api_url, files=files)
-
-        if response.status_code == 200:
-            caption = response.json().get("caption", "No caption received")
-            st.success(f"Generated Caption: '{caption}'")
-        else:
-            # Handle API errors
-            st.error("Failed to generate caption. Please try again.")
+    try:
+        image = Image.open(uploaded_file)
+        st.image(image, use_container_width=True)
+    except Exception:
+        st.error("Invalid image file. Please upload a valid image.")
+    else:
+        if st.button("Generate Image Caption"):
+            with st.spinner("Generating caption..."):
+                files = {"image": uploaded_file.getvalue()}  # Send image data
+                try:
+                    response = requests.post(api_url, files=files)
+                    response.raise_for_status()
+                except requests.exceptions.RequestException as e:
+                    st.error(f"Failed to generate caption: {e}")
+                else:
+                    result = response.json()
+                    caption = result.get("caption", "No caption received")
+                    st.success(f"Generated Caption: '{caption}'")
