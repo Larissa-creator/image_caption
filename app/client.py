@@ -11,7 +11,8 @@ if uploaded_file is not None:
     st.image(image, use_container_width=True)
 
     if st.button("Generate Image Caption"):
-        api_url = "http://localhost:8000/generate/caption"
+        # api_url = "http://localhost:8000/generate/caption"
+        api_url = "https://larissa-creator-image-caption-appclient-fnym1e.streamlit.app/generate/caption"
         files = {"image": uploaded_file.getvalue()}  # Send image data
         response = requests.post(api_url, files=files)
 
