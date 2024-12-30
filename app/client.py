@@ -1,7 +1,13 @@
 import streamlit as st
 from PIL import Image
 from models.text import load_multi_modal_model, generate_image_caption
-# import requests
+
+st.set_page_config(
+       page_title="Image Caption Generator",
+       page_icon="📷",
+       layout="centered",  # You can also choose "wide"
+       initial_sidebar_state="auto",  # Or "expanded", "collapsed"
+   )
 
 st.title("Image Caption Generator")
 
